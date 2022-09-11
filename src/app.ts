@@ -30,10 +30,13 @@ app.use(
     express.json();
   }
 );
-app.use(
-  "/",
-  express.static(path.join(__dirname, "../public"), { maxAge: 31557600000 })
-);
+
+app.use(express.static(path.join(__dirname, "public")));
+
+// app.use(
+//   "/",
+//   express.static(path.join(__dirname, "../public"), { maxAge: 31557600000 })
+// );
 app.use(routers);
 app.set("port", process.env.PORT || 3000);
 export default app;
