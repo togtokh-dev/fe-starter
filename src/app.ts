@@ -8,10 +8,36 @@ import bodyParser from "body-parser";
 import lusca from "lusca";
 import path from "path";
 import compression from "compression";
+import morgan from "morgan";
+import date from "date-and-time";
 const jsonParser = bodyParser.json();
 const app: Express = express();
-
-const cors_urls = [];
+app.use(
+  morgan(function (tokens: any, req: any, res: any) {
+    // console.log(
+    //   [
+    //     date.format(new Date(), "YYYY/MM/DD HH:mm:ss"),
+    //     tokens.method(req, res),
+    //     tokens.url(req, res),
+    //     tokens.status(req, res),
+    //     tokens.res(req, res, "content-length"),
+    //     "-",
+    //     tokens["response-time"](req, res),
+    //     "ms",
+    //   ].join(" ")
+    // );
+    return [
+      date.format(new Date(), "YYYY/MM/DD HH:mm:ss"),
+      tokens.method(req, res),
+      tokens.url(req, res),
+      tokens.status(req, res),
+      tokens.res(req, res, "content-length"),
+      "-",
+      tokens["response-time"](req, res),
+      "ms",
+    ].join(" ");
+  })
+);
 app.use(
   cookieParser(),
   fileupload(),
@@ -33,11 +59,12 @@ app.use(
 app.use(express.static(path.join(__dirname, "../public")));
 
 app.get("/", function (req, res) {
-  res.sendFile(path.join(__dirname, "../public", "index.html"));
+  res.sendFile(path.join(__dirname, "../public"));
 });
 app.get("/*", function (req, res) {
-  res.sendFile(path.join(__dirname, "../public", "index.html"));
+  res.sendFile(path.join(__dirname, "../public"));
 });
+
 // app.use(
 //   "/",
 //   express.static(path.join(__dirname, "../public"), { maxAge: 31557600000 })
